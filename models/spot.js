@@ -13,4 +13,4 @@ const spotSchema = new Schema({
 });
 
 // Export Court Model to Make Available to Other Files
-module.exports = mongoose.model('spotGround', spotSchema)
+module.exports = mongoose.model('spotgrounds', spotSchema)

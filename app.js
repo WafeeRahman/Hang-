@@ -4,7 +4,7 @@ const spotGround = require('./models/spot');
 //Connect to Mongoose and Acquire Courtground Schema
 
 mongoose.connect('mongodb://127.0.0.1:27017/spot-grounds', {
-    useNewUrlParser : true, 
+    useNewUrlParser: true,
     useUnifiedTopology: true,
 });
 
@@ -29,18 +29,18 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('/views', path.join(__dirname, 'views'));
 
-app.get('/', (req,res) => {
+app.get('/', (req, res) => {
 
     res.render('home');
-    
+
 })
 
-app.get('/makespot', async (req,res) => {
 
-    const spot = new spotGround({title: 'My Spot' , description: 'Local Court'});
-    await spot.save();
 
-    res.send(spot);
+app.get('/spotgrounds', async (req, res) => {
+    const spotGrounds = await spotGround.find({});
+    res.render('spotgrounds/index', { spotGrounds });
+
 })
 
 
