@@ -4,24 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New SpotGround</title>
+    <title>New Spot</title>
 </head>
 
 <body>
     <form action="/spotgrounds" method="POST">
         <div>
             <label for="title">Title</label>
-            <input type="text" name="" id="title" name="spotground[title]">
+            <input type="text" id="title" name="spotgrounds[title]">
         </div>
 
         <div>
             <label for="location">Location</label>
-            <input type="text" name="location" id="title" name="spotground[location]">
+            <input type="text" id="location" name="spotgrounds[location]">
         </div>
 
         <button>Add Spot</button>
 
     </form>
+
+    <footer> 
+        <a href="/spotgrounds">Back</a>
+    </footer>
+    
 </body>
 
 </html>
