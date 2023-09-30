@@ -1,7 +1,7 @@
 const spotGround = require('./models/courtground');
 //Connect to Mongoose and Acquire Courtground Schema
 
-mongoose.connect('mongodb://127.0.0.1:27017/spotgrounds', {
+mongoose.connect('mongodb://127.0.0.1:27017/spot-grounds', {
     useNewUrlParser : true, 
     useUnifiedTopology: true,
 });
