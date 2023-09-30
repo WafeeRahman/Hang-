@@ -4,7 +4,7 @@ const Schema = mongoose.Schema; //Schema Constant for Shorthand
 
 
 //Schema for Court Data Model
-const courtSchema = new Schema({
+const spotSchema = new Schema({
     title: String,
     description: String,
     price: String,
@@ -13,4 +13,4 @@ const courtSchema = new Schema({
 });
 
 // Export Court Model to Make Available to Other Files
-module.exports = mongoose.model('courtModel', courtSchema)
+module.exports = mongoose.model('spotGround', spotSchema)
