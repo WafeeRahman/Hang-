@@ -10,8 +10,8 @@
     <h1>All spotGrounds</h1>
 
     <ul>
-        <% for (let spot of spotgrounds) { %>
-            <li><%= spot.title  %></li>
+        <% for (let spot of spotGrounds) { %>
+            <li><a href="spotgrounds/<%= spot._id  %>"><%= spot.title  %></a></li>
 
         <% } %>
     </ul>

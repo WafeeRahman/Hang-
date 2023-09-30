@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 
     res.render('home');
 
-})
+});
 
 
 
@@ -41,7 +41,27 @@ app.get('/spotgrounds', async (req, res) => {
     const spotGrounds = await spotGround.find({});
     res.render('spotgrounds/index', { spotGrounds });
 
-})
+});
+
+app.get('/spotgrounds/new', (req,res) => {
+    res.render('spotgrounds/new');
+});
+
+
+app.post('/spotgrounds', async(req, res) {
+    res.send(req.body)
+
+});
+
+app.get('/spotgrounds/:id', async (req, res) => {
+
+    const id = req.params.id;
+    const spot = await spotGround.findById(id);
+    res.render('spotgrounds/show', {spot});
+      
+});
+
+
 
 
 app.listen(3000, () => {
