@@ -33,13 +33,16 @@ const sample = array => array[Math.floor(Math.random() * array.length)]
 const seedDB = async() => {
     
     await spotGround.deleteMany({}); //Delete All
-
+    const price = Math.floor(Math.random() * 20) + 10
     for (let i = 0; i <= 50; i++) {
         const random1000 = Math.floor(Math.random() * 1000);
 
         let spot = new spotGround({
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
-            title: `${sample(descriptors)} ${sample(places)}`
+            title: `${sample(descriptors)} ${sample(places)}`,
+            thumbnail:  `https://source.unsplash.com/collection/483251`,
+            description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet dui in leo dictum cursus. Sed a blandit urna. Morbi ultricies, ante vitae gravida consectetur`,
+            price 
         }); 
         await spot.save(); // Create New Spot and Save
     }

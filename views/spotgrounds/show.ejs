@@ -1,23 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpotGrounds</title>
-</head>
-<body>
-    <h1><%= spot.title %></h1>
-    <h2><%= spot.location %></h2>
+<% layout('/layouts/boilerplate') %>
 
-    <footer> 
-        <a href="/spotgrounds">Back</a>
-        <a href="/spotgrounds/<%=spot._id%>/edit">Edit</a>
-       
-    </footer>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card mb-3">
+                <img src="<%=spot.thumbnail%>" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%= spot.title %>
+                    </h5>
+                    <p class="card-text">
+                        <%= spot.description %>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <%= spot.location %>
+                    </li>
+                    <li class="list-group-item">$<%= spot.price %>/Night</li>
+                </ul>
+                <div class="card-footer">
+                    <a href="/spotgrounds" class="card-link btn btn-success">Back</a>
+                    <a href="/spotgrounds/<%=spot._id%>/edit" class="card-link btn btn-warning">Edit</a>
 
-    <form action="/spotgrounds/<%=spot._id%>?_method=DELETE" method="POST">
-        <button> Delete Post </button>
-    </form>
-
-</body>
-</html>
+                    <form class="d-inline" action="/spotgrounds/<%=spot._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger"> Delete Post </button>
+                    </form>
+                   
+                </div>
+                <div class="card-footer text-muted">
+                    2 Days Ago
+                </div>
+            </div>
+        </div>
+    </div>

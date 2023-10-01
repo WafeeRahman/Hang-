@@ -1,28 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>spotGROUNDS</title>
-</head>
-
-<body>
+<% layout('/layouts/boilerplate') %>
     <h1>All spotGROUNDS</h1>
-
+    
     <div>
         <a href="spotgrounds/new"> Add A Spot </a>
     </div>
 
-    <ul>
-        <% for (let spot of spotGrounds) { %>
-            <li><a href="spotgrounds/<%= spot._id  %>">
-                    <%= spot.title %>
-                </a></li>
+    <% for (let spot of spotGrounds) { %>
 
-            <% } %>
-    </ul>
+        <div class="card mb-3">
+            <a href="spotgrounds/<%= spot._id  %>">
+                <%= spot.title %>
+            </a>
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="img-fluid" alt="" src="<%=spot.thumbnail%>">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= spot.title %>
+                        </h5>
+                        <p class="card-text">
+                            <%= spot.description %>
+                        </p>
+                        <p class="card-text"><small class="text-muted">
+                                <%= spot.location %>
+                            </small></p>
+                        <a href="spotgrounds/<%=spot._id%>" class="btn btn-primary "> View</a>
+                    </div>
 
-</body>
+                </div>
+            </div>
 
-</html>
+        </div>
+
+        <% } %>

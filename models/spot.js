@@ -7,8 +7,9 @@ const Schema = mongoose.Schema; //Schema Constant for Shorthand
 const spotSchema = new Schema({
     title: String,
     description: String,
-    price: String,
-    location: String
+    price: Number,
+    location: String,
+    thumbnail: String
 
 });
 

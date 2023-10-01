@@ -18,13 +18,14 @@ db.once("open", () => {
 
 
 
-//Initialize Express and RESTful Routes
+//Initialize Express, EJS mate and RESTful Routes
 
+const EJSmate = require('ejs-mate');
 const express = require('express');
 const app = express();
 const methodOverride = require('method-override');
 
-
+app.engine('ejs', EJSmate)
 app.set('view engine', 'ejs');
 app.set('/views', path.join(__dirname, 'views'));
 
@@ -58,7 +59,7 @@ app.get('/spotgrounds/new', (req, res) => {
     res.render('spotgrounds/new');
 
 });
-
+//
 // Allows users to CREATE a page with a post request
 app.post('/spotgrounds', async (req, res) => {
     const spot = new spotGround(req.body.spotgrounds); //Forms create a new spotground object

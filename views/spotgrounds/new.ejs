@@ -1,32 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout('/layouts/boilerplate') %>
+    <div class="row">
+        <h1 class="text-center">
+            New Spot
+        </h1>
+        <div class="col-6 offset-3">
+            <form action="/spotgrounds" method="POST">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="spotgrounds[title]">
+                </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Spot</title>
-</head>
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="spotgrounds[location]">
+                </div>
 
-<body>
-    <form action="/spotgrounds" method="POST">
-        <div>
-            <label for="title">Title</label>
-            <input type="text" id="title" name="spotgrounds[title]">
+                <div class="mb-3">
+                    <label class="form-label" for="image">Image URL</label>
+                    <input class="form-control" type="text" id="image" name="spotgrounds[thumbnail]">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="Decription">Description</label>
+                    <textarea class="form-control" name="spotgrounds[description]" id="description" cols="30" rows="10">
+
+                    </textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="Price">Price</label>
+                    <div class="input-group ">
+                        <span class="input-group-text" id="basic-addon1">$</span>
+                        
+                        <input type="text" class="form-control" id="price" placeholder="0"
+                            name="spotgrounds[price]">
+                    </div>
+                </div>
+
+                <button class="btn bg-success text-light">Add Spot</button>
+                <a href="/spotgrounds" class="btn bg-danger text-light">Back</a>
+            </form>
         </div>
-
-        <div>
-            <label for="location">Location</label>
-            <input type="text" id="location" name="spotgrounds[location]">
-        </div>
-
-        <button>Add Spot</button>
-
-    </form>
-
-    <footer> 
-        <a href="/spotgrounds">Back</a>
-    </footer>
-    
-</body>
-
-</html>
+    </div>
