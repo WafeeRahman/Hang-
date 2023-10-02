@@ -27,7 +27,7 @@ const EJSmate = require('ejs-mate');
 const express = require('express');
 const app = express();
 const methodOverride = require('method-override');
-
+const { spotGroundSchema } = require('./models/schemas');
 app.engine('ejs', EJSmate)
 app.set('view engine', 'ejs');
 app.set('/views', path.join(__dirname, 'views'));
@@ -40,6 +40,22 @@ app.use((req, res, next) => {
     next();
 })
 
+//Function Validates All put and post requests from async functions
+const validateSpot = (req,res,next) => {
+    
+    const { error } = spotGroundSchema.validate(req.body);
+
+    //Get Different Types of Errors using JOI
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    }
+    else{
+        next();
+    }
+
+    console.log(result);
+}
 
 app.get('/', (req, res) => {
 
@@ -64,8 +80,9 @@ app.get('/spotgrounds/new', (req, res) => {
 });
 
 // Allows users to CREATE a page with a post request
-app.post('/spotgrounds', wrapAsync(async (req, res, next) => {
-    if (!req.body.spotgrounds) throw new ExpressError('Invalid Data', 400) //Check for Valid Data
+app.post('/spotgrounds', validateSpot, wrapAsync(async (req, res, next) => {
+    //if (!req.body.spotgrounds) throw new ExpressError('Invalid Data', 400) //Check for Valid Data
+
     const spot = new spotGround(req.body.spotgrounds); //Forms create a new spotground object
     await spot.save(); //Save to DB
     res.redirect(`/spotgrounds/${spot._id}`) //Redirects to details page
@@ -83,7 +100,7 @@ app.get('/spotgrounds/:id', wrapAsync(async (req, res) => {
 }));
 
 // Allows users to UPDATE SpotsGrounds within the dataBase using method override and HTML put requests
-app.put('/spotgrounds/:id', wrapAsync(async (req, res, next) => {
+app.put('/spotgrounds/:id', validateSpot, wrapAsync(async (req, res, next) => {
     if (!req.body.spotgrounds) throw new ExpressError('Invalid Data', 400)
     const id = req.params.id;
     const spot = await spotGround.findByIdAndUpdate(id, { ...req.body.spotgrounds }, { new: true }); // Spread req body into the database object with matching id
