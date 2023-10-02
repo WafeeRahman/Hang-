@@ -4,29 +4,41 @@
         New Spot
     </h1>
     <div class="col-6 offset-3">
-        <form action="/spotgrounds/<%=spot._id%>?_method=PUT" method="POST">
+        <form action="/spotgrounds/<%=spot._id%>?_method=PUT" method="POST" novalidate class="validated-form">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
-                <input class="form-control" type="text" id="title" name="spotgrounds[title]" value="<%= spot.title %>">
+                <input class="form-control" type="text" id="title" name="spotgrounds[title]" value="<%= spot.title %>"
+                    required>
+                <div class="valid-feedback">
+                    Looking Good!
+                </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="location">Location</label>
                 <input class="form-control" type="text" id="location" name="spotgrounds[location]"
-                    value="<%= spot.location %>">
+                    value="<%= spot.location %>" required>
+                <div class="valid-feedback">
+                    Looking Good!
+                </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="image">Image URL</label>
                 <input class="form-control" type="text" id="image" name="spotgrounds[thumbnail]"
-                    value="<%= spot.thumbnail %>">
+                    value="<%= spot.thumbnail %>" required>
+                <div class="valid-feedback">
+                    Looking Good!
+                </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="Decription">Description</label>
-                <textarea class="form-control" name="spotgrounds[description]" id="description">
-                <%= spot.description %>
-                </textarea>
+                <label class="form-label" for="description">Description</label>
+                <textarea class="form-control" name="spotgrounds[description]" id="description" required>
+                <%= spot.description %></textarea>
+                <div class="valid-feedback">
+                    Looking Good!
+                </div>
             </div>
 
             <div class="mb-3">
@@ -35,7 +47,10 @@
                     <span class="input-group-text" id="basic-addon1">$</span>
 
                     <input type="text" class="form-control" id="price" placeholder="0" name="spotgrounds[price]"
-                        value="<%= spot.price %>">
+                        value="<%= spot.price %>" required>
+                </div>
+                <div class="valid-feedback">
+                    Looking Good!
                 </div>
             </div>
 

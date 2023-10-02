@@ -4,36 +4,50 @@
             New Spot
         </h1>
         <div class="col-6 offset-3">
-            <form action="/spotgrounds" method="POST">
+            <form action="/spotgrounds" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
                     <label class="form-label" for="title">Title</label>
-                    <input class="form-control" type="text" id="title" name="spotgrounds[title]">
+                    <input class="form-control" type="text" id="title" name="spotgrounds[title]" required>
+                    <div class="valid-feedback">
+                        Looking Good!
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
-                    <input class="form-control" type="text" id="location" name="spotgrounds[location]">
+                    <input class="form-control" type="text" id="location" name="spotgrounds[location]" required>
+                    <div class="valid-feedback">
+                        Looking Good!
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="image">Image URL</label>
-                    <input class="form-control" type="text" id="image" name="spotgrounds[thumbnail]">
+                    <input class="form-control" type="text" id="image" name="spotgrounds[thumbnail]" required>
+                    <div class="valid-feedback">
+                        Looking Good!
+                    </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label" for="Decription">Description</label>
-                    <textarea class="form-control" name="spotgrounds[description]" id="description" cols="30" rows="10">
-
-                    </textarea>
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" name="spotgrounds[description]" id="description"
+                        required></textarea>
+                    <div class="valid-feedback">
+                        Looking Good!
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="Price">Price</label>
-                    <div class="input-group ">
+                    <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">$</span>
-                        
-                        <input type="text" class="form-control" id="price" placeholder="0"
-                            name="spotgrounds[price]">
+
+                        <input type="text" class="form-control" id="price" placeholder="0" name="spotgrounds[price]"
+                            required>
+                    </div>
+                    <div class="valid-feedback">
+                        Looking Good!
                     </div>
                 </div>
 
@@ -42,3 +56,4 @@
             </form>
         </div>
     </div>
+
