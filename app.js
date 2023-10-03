@@ -1,6 +1,7 @@
 const mongoose = require('mongoose'); //Req Mongoose
 const path = require('path')
 const spotGround = require('./models/spot');
+const Review = require('./models/review')
 //Connect to Mongoose and Acquire Courtground Schema
 
 mongoose.connect('mongodb://127.0.0.1:27017/spot-grounds', {
@@ -27,7 +28,7 @@ const EJSmate = require('ejs-mate');
 const express = require('express');
 const app = express();
 const methodOverride = require('method-override');
-const { spotGroundSchema } = require('./models/schemas');
+const { spotGroundSchema, reviewSchema } = require('./models/schemas');
 app.engine('ejs', EJSmate)
 app.set('view engine', 'ejs');
 app.set('/views', path.join(__dirname, 'views'));
@@ -41,8 +42,8 @@ app.use((req, res, next) => {
 })
 
 //Function Validates All put and post requests from async functions
-const validateSpot = (req,res,next) => {
-    
+const validateSpot = (req, res, next) => {
+
     const { error } = spotGroundSchema.validate(req.body);
 
     //Get Different Types of Errors using JOI
@@ -50,11 +51,25 @@ const validateSpot = (req,res,next) => {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
     }
-    else{
+    else {
         next();
     }
 
     console.log(result);
+}
+
+//Validator For Review Schema
+
+const validateReview = (req,res,next) => {
+    const {error} = reviewSchema.validate(req.body);
+
+    if(error){
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg,400)
+    }
+    else {
+        next();
+    }
 }
 
 app.get('/', (req, res) => {
@@ -94,7 +109,7 @@ app.post('/spotgrounds', validateSpot, wrapAsync(async (req, res, next) => {
 app.get('/spotgrounds/:id', wrapAsync(async (req, res) => {
 
     const id = req.params.id;
-    const spot = await spotGround.findById(id);
+    const spot = await spotGround.findById(id).populate('reviews');
     res.render('spotgrounds/show', { spot });
 
 }));
@@ -124,9 +139,40 @@ app.delete('/spotgrounds/:id', wrapAsync(async (req, res) => {
     const deleted = await spotGround.findByIdAndDelete(id);
     res.redirect(`/spotgrounds`)
 
+
+
+
 }));
 
-//Error Handler
+
+//Post Route for Reviews, Push onto SPOT's reviews, save each object, redirect
+app.post('/spotgrounds/:id/reviews', validateReview, wrapAsync(async (req, res, next) => {
+    
+
+    const spot = await spotGround.findById(req.params.id);
+    const review = new Review(req.body.review);
+    spot.reviews.push(review);
+    await review.save();
+    await spot.save();
+    res.redirect(`/spotgrounds/${spot._id}`)
+
+
+}));
+
+//Delete Route For Reviews, Deletes within spot obj, aswell as review DB
+app.delete('/spotgrounds/:id/reviews/:revID', wrapAsync(async (req,res,next) => {
+    const {id, revID} = req.params;
+    
+    await spotGround.findByIdAndUpdate(id, { $pull: {reviews: revID }});
+    await Review.findByIdAndDelete(revID);
+    res.redirect(`/spotgrounds/${id}`);
+}));
+
+
+
+
+
+//Error Handler Middleware
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found -- Invalid Route', 404))
