@@ -36,6 +36,7 @@ router.post('/', validateReview, wrapAsync(async (req, res, next) => {
     spot.reviews.push(review);
     await review.save();
     await spot.save();
+    req.flash('success', 'Review Added!')
     res.redirect(`/spotgrounds/${spot._id}`)
 
 
@@ -47,6 +48,7 @@ router.delete('/:revID', wrapAsync(async (req,res,next) => {
     
     await spotGround.findByIdAndUpdate(id, { $pull: {reviews: revID }});
     await Review.findByIdAndDelete(revID);
+    req.flash('success', 'Review Deleted')
     res.redirect(`/spotgrounds/${id}`);
 }));
 

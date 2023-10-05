@@ -48,8 +48,13 @@ router.get('/new', (req, res) => {
 
 });
 
+
+
+
+
 // Allows users to CREATE a page with a post request
 router.post('/', validateSpot, wrapAsync(async (req, res, next) => {
+    req.flash('success', 'Post Successful!')
     //if (!req.body.spotgrounds) throw new ExpressError('Invalid Data', 400) //Check for Valid Data
 
     const spot = new spotGround(req.body.spotgrounds); //Forms create a new spotground object
@@ -59,23 +64,30 @@ router.post('/', validateSpot, wrapAsync(async (req, res, next) => {
 
 }));
 
-// Allows users to READ an existing spotGround page in more detail
-router.get('/:id', wrapAsync(async (req, res) => {
 
-    const id = req.params.id;
-    const spot = await spotGround.findById(id).populate('reviews');
-    res.render('spotgrounds/show', { spot });
-
-}));
 
 // Allows users to UPDATE SpotsGrounds within the dataBase using method override and HTML put requests
 router.put('/:id', validateSpot, wrapAsync(async (req, res, next) => {
-    if (!req.body.spotgrounds) throw new ExpressError('Invalid Data', 400)
+    req.flash('success', 'Edit Successful!')
     const id = req.params.id;
     const spot = await spotGround.findByIdAndUpdate(id, { ...req.body.spotgrounds }, { new: true }); // Spread req body into the database object with matching id
     res.redirect(`/spotgrounds/${spot._id}`) //Redirects to details page
 
 }));
+
+
+// Allows users to READ an existing spotGround page in more detail
+router.get('/:id', wrapAsync(async (req, res) => {
+    const id = req.params.id;
+    const spot = await spotGround.findById(id).populate('reviews');
+    if (!spot) {
+        req.flash('error', 'Spot Not Found.');
+        return res.redirect('/spotgrounds');
+    }
+    res.render('spotgrounds/show', { spot });
+
+}));
+
 
 // Allows users to fill forms to UPDATE spotGround
 
@@ -83,6 +95,10 @@ router.get('/:id/edit', wrapAsync(async (req, res) => {
 
     const id = req.params.id;
     const spot = await spotGround.findById(id);
+    if (!spot) {
+        req.flash('error', 'Spot Not Found.');
+        return res.redirect('/spotgrounds');
+    }
     res.render('spotgrounds/edit', { spot });
 
 }));
@@ -91,6 +107,7 @@ router.delete('/:id', wrapAsync(async (req, res) => {
 
     const { id } = req.params;
     const deleted = await spotGround.findByIdAndDelete(id);
+    req.flash('success', 'Deleted Spot')
     res.redirect(`/spotgrounds`)
 
 
