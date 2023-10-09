@@ -1,31 +1,22 @@
 const express = require('express');
 const router = express.Router();
 
-const ExpressError = require('../utilities/ExpressError')
+
 const wrapAsync = require('../utilities/wrapAsync')
 // Wrap Async try-catches all async functions, and sends error to middleware
 
 
 
 const spotGround = require('../models/spot');
-const { spotGroundSchema } = require('../models/schemas');
+
 const {validateLogin} = require('../middleware') // Pass in login validation middleware
 //Function Validates All put and post requests from async functions
-const validateSpot = (req, res, next) => {
+const {validateSpot} =require('../middleware')
 
-    const { error } = spotGroundSchema.validate(req.body);
 
-    //Get Different Types of Errors using JOI
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    }
-    else {
-        next();
-    }
+//Middleware for validating author
+const {validateAuthor} = require('../middleware')
 
-    console.log(res);
-}
 
 
 //All CRUD Routes for SpotGrounds
@@ -54,6 +45,7 @@ router.post('/', validateLogin, validateSpot, wrapAsync(async (req, res, next) =
     //if (!req.body.spotgrounds) throw new ExpressError('Invalid Data', 400) //Check for Valid Data
 
     const spot = new spotGround(req.body.spotgrounds); //Forms create a new spotground object
+    spot.author = req.user._id;
     await spot.save(); //Save to DB
     res.redirect(`/spotgrounds/${spot._id}`) //Redirects to details page
 
@@ -63,10 +55,12 @@ router.post('/', validateLogin, validateSpot, wrapAsync(async (req, res, next) =
 
 
 // Allows users to UPDATE SpotsGrounds within the dataBase using method override and HTML put requests
-router.put('/:id', validateLogin, validateSpot, wrapAsync(async (req, res, next) => {
-    req.flash('success', 'Edit Successful!')
+router.put('/:id', validateLogin, validateAuthor, validateSpot, wrapAsync(async (req, res, next) => {
+    
+    
     const id = req.params.id;
     const spot = await spotGround.findByIdAndUpdate(id, { ...req.body.spotgrounds }, { new: true }); // Spread req body into the database object with matching id
+    req.flash('success', 'Edit Successful!')
     res.redirect(`/spotgrounds/${spot._id}`) //Redirects to details page
 
 }));
@@ -75,7 +69,8 @@ router.put('/:id', validateLogin, validateSpot, wrapAsync(async (req, res, next)
 // Allows users to READ an existing spotGround page in more detail
 router.get('/:id', wrapAsync(async (req, res) => {
     const id = req.params.id;
-    const spot = await spotGround.findById(id).populate('reviews');
+    const spot = await spotGround.findById(id).populate('reviews').populate('author');
+    
     if (!spot) {
         req.flash('error', 'Spot Not Found.');
         return res.redirect('/spotgrounds');
@@ -87,7 +82,7 @@ router.get('/:id', wrapAsync(async (req, res) => {
 
 // Allows users to fill forms to UPDATE spotGround
 
-router.get('/:id/edit', validateLogin, wrapAsync(async (req, res) => {
+router.get('/:id/edit', validateLogin, validateAuthor, wrapAsync(async (req, res) => {
 
     const id = req.params.id;
     const spot = await spotGround.findById(id);
@@ -95,11 +90,13 @@ router.get('/:id/edit', validateLogin, wrapAsync(async (req, res) => {
         req.flash('error', 'Spot Not Found.');
         return res.redirect('/spotgrounds');
     }
+   
+    
     res.render('spotgrounds/edit', { spot });
 
 }));
 
-router.delete('/:id', validateLogin, wrapAsync(async (req, res) => {
+router.delete('/:id', validateLogin, validateAuthor, wrapAsync(async (req, res) => {
 
     const { id } = req.params;
     const deleted = await spotGround.findByIdAndDelete(id);

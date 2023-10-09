@@ -17,23 +17,29 @@
                         <%= spot.location %>
                     </li>
                     <li class="list-group-item">$<%= spot.price %>/Night</li>
+                    <li class="list-group-item"> Submitted by: <%=spot.author.username %>
+                    </li>
                 </ul>
-                <div class="card-footer">
-                    <a href="/spotgrounds" class="card-link btn btn-success">Back</a>
-                    <a href="/spotgrounds/<%=spot._id%>/edit" class="card-link btn btn-warning">Edit</a>
 
-                    <form class="d-inline" action="/spotgrounds/<%=spot._id%>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger"> Delete Post </button>
-                    </form>
+                <% if (currentUser && (spot.author.equals(currentUser._id))) {%> <!-- Check if Current User is the Same as Poster -->
+                    <div class="card-body">
+                        <a href="/spotgrounds" class="card-link btn btn-success">Back</a>
 
-                </div>
-                <div class="card-footer text-muted">
-                    2 Days Ago
-                </div>
+                        <a href="/spotgrounds/<%=spot._id%>/edit" class="card-link btn btn-warning">Edit</a>
+
+                        <form class="d-inline" action="/spotgrounds/<%=spot._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger"> Delete Post </button>
+                        </form>
+                    </div>
+                    <% } %>
+
+                        <div class="card-footer text-muted">
+                            2 Days Ago
+                        </div>
             </div>
 
 
-          
+
 
         </div>
         <div class="col-6">
@@ -45,7 +51,8 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="body">Leave A Review</label>
-                    <textarea class="form-control" name="review[body]" id="body" cols="30" rows="10" required></textarea>
+                    <textarea class="form-control" name="review[body]" id="body" cols="30" rows="10"
+                        required></textarea>
                     <div class="valid-feedback">
                         Looking Good!
                     </div>
@@ -56,14 +63,16 @@
             <% for (let review of spot.reviews) { %>
                 <div class="card mb-3">
                     <div class="card-body border border-dark rounded p-2 fw-bold">
-                        <h5 class="card-title">Rating: <%=review.rating %></h5>
+                        <h5 class="card-title">Rating: <%=review.rating %>
+                        </h5>
                         <p class="card-text">Review: <%=review.body %>
-                        <form action="/spotgrounds/<%=spot._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-sm btn-danger">Delete</button>
-                        </form>
+                                <form action="/spotgrounds/<%=spot._id%>/reviews/<%=review._id%>?_method=DELETE"
+                                    method="POST">
+                                    <button class="btn btn-sm btn-danger">Delete</button>
+                                </form>
                     </div>
                 </div>
-               
-            <% } %>
+
+                <% } %>
         </div>
     </div>

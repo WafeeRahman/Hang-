@@ -38,6 +38,7 @@ const seedDB = async() => {
         const random1000 = Math.floor(Math.random() * 1000);
 
         let spot = new spotGround({
+            author: '65231e30dd5575df8bdb04fd',
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(places)}`,
             thumbnail:  `https://source.unsplash.com/collection/483251`,

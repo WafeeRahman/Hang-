@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const spotGroundSchema = require('./schemas');
 const Review = require('./review');
 const Schema = mongoose.Schema; //Schema Constant for Shorthand
-
+const User = require('./user')
 
 
 //Schema for Court Data Model
@@ -12,6 +12,10 @@ const spotSchema = new Schema({
     price: Number,
     location: String,
     thumbnail: String,
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     reviews: [
         {
             type: Schema.Types.ObjectId,
