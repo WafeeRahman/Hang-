@@ -2,7 +2,7 @@
 const ExpressError = require('./utilities/ExpressError')
 const { spotGroundSchema, reviewSchema } = require('./models/schemas');
 const spotGround = require('./models/spot');
-
+const Review = require('./models/review');
 module.exports.validateLogin = (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl;
@@ -43,6 +43,16 @@ module.exports.validateAuthor = async (req, res, next) => {
     if (!spot.author.equals(req.user._id)) { //If the requester is not the same as the author, flash an error and return to show page
         req.flash('error', 'You do not have permission to do that!');
         return res.redirect(`/spotgrounds/${spot._id}`)
+    }
+    next();
+}
+
+module.exports.validateReviewAuthor = async (req, res, next) => {
+    const { id, revID } = req.params;
+    const review = await Review.findById(revID)
+    if (!review.author.equals(req.user._id)) { //If the requester is not the same as the author, flash an error and return to show page
+        req.flash('error', 'You do not have permission to do that!');
+        return res.redirect(`/spotgrounds/${id}`)
     }
     next();
 }

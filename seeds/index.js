@@ -3,7 +3,7 @@
 
 const mongoose = require('mongoose'); //Req Mongoose
 const spotGround = require('../models/spot');
-
+const Review = require('../models/review');
 
 //Connect to Mongoose and Acquire Courtground Schema
 mongoose.connect('mongodb://127.0.0.1:27017/spot-grounds', {
@@ -33,6 +33,7 @@ const sample = array => array[Math.floor(Math.random() * array.length)]
 const seedDB = async() => {
     
     await spotGround.deleteMany({}); //Delete All
+    await Review.deleteMany({});
     const price = Math.floor(Math.random() * 20) + 10
     for (let i = 0; i <= 50; i++) {
         const random1000 = Math.floor(Math.random() * 1000);

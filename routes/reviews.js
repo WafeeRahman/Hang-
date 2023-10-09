@@ -6,22 +6,19 @@ const { reviewSchema } = require('../models/schemas');
 
 const ExpressError = require('../utilities/ExpressError')
 const wrapAsync = require('../utilities/wrapAsync')
-// Wrap Async try-catches all async functions, and sends error to middleware
-//Express Error Handler
 
+//Validators
+const {validateLogin, validateSpot, validateAuthor, validateReview, validateReviewAuthor} = require('../middleware') 
 
-
-//Validator For Review Schema
-
-const { validateReview } = require('../middleware')
 
 
 //Post Route for Reviews, Push onto SPOT's reviews, save each object, redirect
-router.post('/', validateReview, wrapAsync(async (req, res, next) => {
+router.post('/', validateLogin, validateReview, wrapAsync(async (req, res, next) => {
 
 
     const spot = await spotGround.findById(req.params.id);
     const review = new Review(req.body.review);
+    review.author = req.user._id;
     spot.reviews.push(review);
     await review.save();
     await spot.save();
@@ -32,7 +29,7 @@ router.post('/', validateReview, wrapAsync(async (req, res, next) => {
 }));
 
 //Delete Route For Reviews, Deletes within spot obj, aswell as review DB
-router.delete('/:revID', wrapAsync(async (req, res, next) => {
+router.delete('/:revID',validateLogin, validateReviewAuthor,  wrapAsync(async (req, res, next) => {
     const { id, revID } = req.params;
 
     await spotGround.findByIdAndUpdate(id, { $pull: { reviews: revID } });

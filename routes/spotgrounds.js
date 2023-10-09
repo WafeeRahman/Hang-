@@ -69,7 +69,12 @@ router.put('/:id', validateLogin, validateAuthor, validateSpot, wrapAsync(async 
 // Allows users to READ an existing spotGround page in more detail
 router.get('/:id', wrapAsync(async (req, res) => {
     const id = req.params.id;
-    const spot = await spotGround.findById(id).populate('reviews').populate('author');
+    const spot = await spotGround.findById(id).populate({
+        path: 'reviews',  //Populate Reviews
+         populate: {
+            path: 'author' //Populate Review Author
+        }
+    }).populate('author'); //Populate Post Author
     
     if (!spot) {
         req.flash('error', 'Spot Not Found.');
