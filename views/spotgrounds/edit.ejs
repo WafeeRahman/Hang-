@@ -4,7 +4,8 @@
         New Spot
     </h1>
     <div class="col-6 offset-3">
-        <form action="/spotgrounds/<%=spot._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+        <form action="/spotgrounds/<%=spot._id%>?_method=PUT" method="POST" novalidate class="validated-form"
+            enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
                 <input class="form-control" type="text" id="title" name="spotgrounds[title]" value="<%= spot.title %>"
@@ -23,14 +24,7 @@
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label" for="image">Image URL</label>
-                <input class="form-control" type="text" id="image" name="spotgrounds[thumbnail]"
-                    value="<%= spot.thumbnail %>" required>
-                <div class="valid-feedback">
-                    Looking Good!
-                </div>
-            </div>
+
 
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
@@ -52,6 +46,27 @@
                 <div class="valid-feedback">
                     Looking Good!
                 </div>
+
+
+                <div class="mb-3">
+                    <label for="thumbnail" class="form-label">Add More Images</label>
+                    <input class="form-control" type="file" id="thumbnail" name="thumbnail" multiple>
+                </div>
+
+                <div class="mb-3">
+                    <% spot.thumbnail.forEach(function(thmb, i) { %>
+                        <img src="<%= thmb.thumbnail %>" class="img-thumbnail" alt="">
+                        <div class="form-check-inline">
+
+                            <input type="checkbox" id="thumbnail-<%=i%>" name="deleteImages[]"
+                                value="<%= thmb.filename %>">
+
+                        </div>
+                        <label for="thumbnail-<%=i%>">Delete?</label>
+
+                        <% }) %>
+                </div>
+
             </div>
 
             <button class="btn bg-info text-light">Update Spot</button>

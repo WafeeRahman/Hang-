@@ -1,4 +1,5 @@
 const spotGround = require('../models/spot');
+const {cloudinary} = require("../cloudinary/index")
 
 module.exports.index = async (req, res) => {
     const spotGrounds = await spotGround.find({}); //Find all spotGrounds in DB to pass into site
@@ -12,12 +13,12 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createSpot = async (req, res, next) => {
-    req.files.map( f => ({ url: f.path, filename: f.filename }))
-    
+    req.files.map(f => ({ url: f.path, filename: f.filename }))
+
     //if (!req.body.spotgrounds) throw new ExpressError('Invalid Data', 400) //Check for Valid Data
 
     const spot = new spotGround(req.body.spotgrounds); //Forms create a new spotground object
-    spot.thumbnail =  req.files.map( f => ({ url: f.path, filename: f.filename }));
+    spot.thumbnail = req.files.map(f => ({ url: f.path, filename: f.filename }));
     spot.author = req.user._id;
     await spot.save(); //Save to DB
     console.log(spot);
@@ -31,11 +32,11 @@ module.exports.showSpot = async (req, res) => {
     const id = req.params.id;
     const spot = await spotGround.findById(id).populate({
         path: 'reviews',  //Populate Reviews
-         populate: {
+        populate: {
             path: 'author' //Populate Review Author
         }
     }).populate('author'); //Populate Post Author
-    
+
     if (!spot) {
         req.flash('error', 'Spot Not Found.');
         return res.redirect('/spotgrounds');
@@ -52,17 +53,31 @@ module.exports.renderEditForm = async (req, res) => {
         req.flash('error', 'Spot Not Found.');
         return res.redirect('/spotgrounds');
     }
-   
-    
+
+
     res.render('spotgrounds/edit', { spot });
 
 }
 
 module.exports.updateSpot = async (req, res, next) => {
-    
-    
+
+
     const id = req.params.id;
     const spot = await spotGround.findByIdAndUpdate(id, { ...req.body.spotgrounds }, { new: true }); // Spread req body into the database object with matching id
+    const thmbs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    spot.thumbnail.push(...thmbs)
+    await spot.save();
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages)
+        {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await spotGround.updateOne({ $pull: { thumbnail: { filename: { $in: req.body.deleteImages } } } })
+
+    }
+   
+
+
     req.flash('success', 'Edit Successful!')
     res.redirect(`/spotgrounds/${spot._id}`) //Redirects to details page
 

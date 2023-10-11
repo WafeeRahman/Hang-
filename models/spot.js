@@ -6,18 +6,21 @@ const User = require('./user')
 
 
 //Schema for Court Data Model
+const ImageSchema = new Schema({
+    url: String,
+    filename: String
+});
+
+ImageSchema.virtual('thumbnail').get(function () {
+    return this.url.replace('/upload', '/upload/w_200')
+});
+
 const spotSchema = new Schema({
     title: String,
     description: String,
     price: Number,
     location: String,
-    thumbnail: [
-        {
-            url: String,
-            filename: String
-        }
-
-    ],
+    thumbnail: [ImageSchema],
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'

@@ -54,7 +54,7 @@ router.route('/:id') //Router Chain for get,put, and delete requests
 
     // Allows users to fill forms to UPDATE spotGround
 
-    .put(validateLogin, validateAuthor, validateSpot, wrapAsync(spotgrounds.updateSpot))
+    .put(validateLogin, validateAuthor, upload.array('thumbnail'), validateSpot, wrapAsync(spotgrounds.updateSpot))
 
     //Delete Route
 
