@@ -1,6 +1,8 @@
 const spotGround = require('../models/spot');
 const {cloudinary} = require("../cloudinary/index")
-
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding")
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geoCoder = mbxGeocoding({accessToken: mapBoxToken });
 module.exports.index = async (req, res) => {
     const spotGrounds = await spotGround.find({}); //Find all spotGrounds in DB to pass into site
     res.render('spotgrounds/index', { spotGrounds });
@@ -16,8 +18,14 @@ module.exports.createSpot = async (req, res, next) => {
     req.files.map(f => ({ url: f.path, filename: f.filename }))
 
     //if (!req.body.spotgrounds) throw new ExpressError('Invalid Data', 400) //Check for Valid Data
+    const geoData = await geoCoder.forwardGeocode({
+        query: req.body.spotgrounds.location,
+        limit: 1
+    }).send();
+    
 
     const spot = new spotGround(req.body.spotgrounds); //Forms create a new spotground object
+    spot.geometry = geoData.body.features[0].geometry; //Pass in Geometry to schema
     spot.thumbnail = req.files.map(f => ({ url: f.path, filename: f.filename }));
     spot.author = req.user._id;
     await spot.save(); //Save to DB

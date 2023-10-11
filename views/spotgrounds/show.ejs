@@ -3,27 +3,28 @@
 
     <div class="row">
         <div class="col-6 ">
+            
 
             <div id="spotGroundCarousel" class="carousel slide">
                 <div class="carousel-inner">
-                    <% spot.thumbnail.forEach((tmb, i) => {   %>
+                    <% spot.thumbnail.forEach((tmb, i)=> { %>
                         <div class="carousel-item <%= i === 0? 'active' : '' %>">
                             <img src="<%=tmb.url%>" class="d-block w-100" alt="">
                         </div>
                         <% }) %>
                 </div>
-                <% if (spot.thumbnail.length > 1 ) { %>
-                <button class="carousel-control-prev" type="button" data-bs-target="#spotGroundCarousel"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#spotGroundCarousel"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-                <% } %>
+                <% if (spot.thumbnail.length> 1 ) { %>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#spotGroundCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#spotGroundCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    <% } %>
             </div>
 
             <div class="card mb-3">
@@ -70,6 +71,7 @@
 
 
         <div class="col-6">
+            <div id='map' style='width: 400px; height: 300px;'></div>
             <% if (currentUser) { %>
                 <h2>Leave a Review</h2>
                 <form action="/spotgrounds/<%=spot._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
@@ -127,5 +129,12 @@
                         </div>
 
                         <% } %>
+
         </div>
     </div>
+    <script>
+        const mapToken ='<%-process.env.MAPBOX_TOKEN;%>'
+        const spot = <%- JSON.stringify(spot) %> 
+    </script>
+
+    <script src="/js/showPageMap.js"></script>

@@ -1,6 +1,6 @@
 <% layout('/layouts/boilerplate') %>
     <h1>All spotGROUNDS</h1>
-    
+
     <div>
         <a href="spotgrounds/new"> Add A Spot </a>
     </div>
@@ -12,7 +12,12 @@
             </a>
             <div class="row">
                 <div class="col-md-4">
-                    <img class="img-fluid" alt="" src="<%=spot.thumbnail[0].url%>">
+                    <% if (spot.thumbnail.length) { %>
+                        <img class="img-fluid" alt="" src="<%=spot.thumbnail[0].url%>">
+                        <% } else {%>
+                            <img class="img-fluid" alt=""
+                                src="https://res.cloudinary.com/djgibqxxv/image/upload/v1697057877/wiwcjtc0dcxzxqhhsiai.jpg">
+                            <% } %>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">

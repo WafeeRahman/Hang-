@@ -21,6 +21,17 @@ const spotSchema = new Schema({
     price: Number,
     location: String,
     thumbnail: [ImageSchema],
+    geometry : { //Mongoose GEOJSON model
+        type: {
+            type: String, 
+            enum: ['Point'], 
+            required: true
+          },
+          coordinates: {
+            type: [Number],
+            required: true
+          }
+    },
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
