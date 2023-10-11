@@ -69,14 +69,16 @@
                             <div class="card-body border border-dark rounded p-2 fw-bold">
                                 <h5 class="card-title">Rating: <%=review.rating %>
                                 </h5>
-                                <h5 class="card-subtitle">By: <%= review.author.username %></h5>
+                                <h6 class="card-subtitle text-muted">By: <%= review.author.username %>
+                                </h6>
                                 <p class="card-text">Review: <%=review.body %>
-                                    <% if (currentUser && (spot.author.equals(currentUser._id))) { %>
-                                        <form action="/spotgrounds/<%=spot._id%>/reviews/<%=review._id%>?_method=DELETE"
-                                            method="POST">
-                                            <button class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
-                                        <% } %>
+                                        <% if (currentUser && (spot.author.equals(currentUser._id))) { %>
+                                            <form
+                                                action="/spotgrounds/<%=spot._id%>/reviews/<%=review._id%>?_method=DELETE"
+                                                method="POST">
+                                                <button class="btn btn-sm btn-danger">Delete</button>
+                                            </form>
+                                            <% } %>
                             </div>
                         </div>
 
