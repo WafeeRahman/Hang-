@@ -12,12 +12,16 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createSpot = async (req, res, next) => {
-    req.flash('success', 'Post Successful!')
+    req.files.map( f => ({ url: f.path, filename: f.filename }))
+    
     //if (!req.body.spotgrounds) throw new ExpressError('Invalid Data', 400) //Check for Valid Data
 
     const spot = new spotGround(req.body.spotgrounds); //Forms create a new spotground object
+    spot.thumbnail =  req.files.map( f => ({ url: f.path, filename: f.filename }));
     spot.author = req.user._id;
     await spot.save(); //Save to DB
+    console.log(spot);
+    req.flash('success', 'Post Successful!')
     res.redirect(`/spotgrounds/${spot._id}`) //Redirects to details page
 
 

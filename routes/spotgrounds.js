@@ -8,6 +8,11 @@ const wrapAsync = require('../utilities/wrapAsync')
 
 
 const spotGround = require('../models/spot');
+const multer = require('multer')
+const { storage } = require('../cloudinary')
+const upload = multer({ storage })
+
+
 
 const { validateLogin } = require('../middleware') // Pass in login validation middleware
 
@@ -27,7 +32,8 @@ router.route('/')
     //Run the spotgrounds index method upon get requests to the root; renders spotground/index
     .get(wrapAsync(spotgrounds.index))
 
-    .post(validateLogin, validateSpot, wrapAsync(spotgrounds.createSpot))
+    .post(validateLogin, upload.array('thumbnail'), validateSpot,  wrapAsync(spotgrounds.createSpot))
+
 
 
 

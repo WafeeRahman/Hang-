@@ -43,6 +43,7 @@ module.exports.renderLoginForm = (req, res) => {
 module.exports.loginUser = (req, res) => {
     req.flash('success', 'Welcome back!');
     const redirectUrl = res.locals.returnTo || '/spotgrounds'; // update this line to use res.locals.returnTo now
+    delete req.session.returnTo 
     res.redirect(redirectUrl);
 }
 module.exports.logoutUser = (req, res, next) => {

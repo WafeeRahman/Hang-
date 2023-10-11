@@ -11,7 +11,13 @@ const spotSchema = new Schema({
     description: String,
     price: Number,
     location: String,
-    thumbnail: String,
+    thumbnail: [
+        {
+            url: String,
+            filename: String
+        }
+
+    ],
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'

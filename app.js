@@ -1,3 +1,8 @@
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
+
 const mongoose = require('mongoose'); //Req Mongoose
 const path = require('path')
 
@@ -78,7 +83,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
-    console.log(req.method, req.path);
+   // console.log(req.method, req.path);
     next();
 })
 

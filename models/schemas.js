@@ -5,7 +5,7 @@ module.exports.spotGroundSchema = Joi.object({
     spotgrounds: Joi.object({
         title: Joi.string().required(),
         price: Joi.number().required().min(0),
-        thumbnail: Joi.string().required(),
+       // thumbnail: Joi.string().required(),
         location: Joi.string().required(),
         description: Joi.string().required()
 
