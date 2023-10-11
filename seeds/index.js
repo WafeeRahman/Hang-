@@ -35,7 +35,7 @@ const seedDB = async () => {
     await spotGround.deleteMany({}); //Delete All
     await Review.deleteMany({});
     const price = Math.floor(Math.random() * 20) + 10
-    for (let i = 0; i <= 50; i++) {
+    for (let i = 0; i <= 200; i++) {
         const random1000 = Math.floor(Math.random() * 1000);
 
         let spot = new spotGround({
@@ -44,13 +44,13 @@ const seedDB = async () => {
             title: `${sample(descriptors)} ${sample(places)}`,
             geometry: {
                 type: 'Point',
-                coordinates: [-122.330062, 47.603832]
+                coordinates: [cities[random1000].longitude, cities[random1000].latitude]
 
             },
             thumbnail: [
                 {
 
-                    url: "https://res.cloudinary.com/djgibqxxv/image/upload/v1696999583/Hang/eqknka5bxlemz7hzo54g.png",
+                    url: "https://res.cloudinary.com/djgibqxxv/image/upload/v1697060327/Hang/fxieuywuplxkjaamicbk.jpg",
                     filename: "Hang/eqknka5bxlemz7hzo54g"
                 },
                 {

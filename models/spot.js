@@ -15,6 +15,7 @@ ImageSchema.virtual('thumbnail').get(function () {
     return this.url.replace('/upload', '/upload/w_200')
 });
 
+const opts = { toJSON: { virtuals: true}};
 const spotSchema = new Schema({
     title: String,
     description: String,
@@ -43,6 +44,11 @@ const spotSchema = new Schema({
         }
     ]
 
+}, opts);
+
+spotSchema.virtual('properties.popUpMarkup').get(function () {
+    return `<strong><a href="/spotgrounds/${this._id}">${this.title}</a><strong>
+    <p>${this.description.substring(0,20)}...</p>`
 });
 
 //Mongo MiddleWare for Reviews being Deleted Upon Spot Deletion
