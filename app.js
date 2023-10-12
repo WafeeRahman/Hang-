@@ -107,8 +107,6 @@ app.use(
     })
 );
 
-
-
 const MongoStore = require('connect-mongo');
 const store = MongoStore.create({
     mongoUrl: dbUrl,
