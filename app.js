@@ -6,9 +6,11 @@ if (process.env.NODE_ENV !== "production") {
 const mongoose = require('mongoose'); //Req Mongoose
 const path = require('path')
 const mongoSanitize = require('express-mongo-sanitize');
+const dbUrl = process.env.DB_URL;
 //Connect to Mongoose and Acquire Courtground Schema
+//'mongodb://127.0.0.1:27017/spot-grounds'
 
-mongoose.connect('mongodb://127.0.0.1:27017/spot-grounds', {
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
@@ -29,6 +31,7 @@ const EJSmate = require('ejs-mate'); //EJSmate -- Engine allows support for the 
 
 const express = require('express');
 const session = require('express-session')
+
 const flash = require('connect-flash') // Allows Flash Messages
 const app = express();
 const methodOverride = require('method-override');
@@ -40,7 +43,10 @@ const User = require('./models/user');
 const userRoutes = require('./routes/users');
 const spotgroundRoutes = require('./routes/spotgrounds');
 const reviewRoutes = require('./routes/reviews');
+
 const helmet = require('helmet')
+
+
 
 app.engine('ejs', EJSmate)
 app.set('view engine', 'ejs');
@@ -50,6 +56,9 @@ app.use(express.urlencoded({ extended: true })); // Parses Pages
 app.use(methodOverride('_method')) //Overwrites HTML methods for PATCHING
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(mongoSanitize());
+
+const ExpressError = require('./utilities/ExpressError')
+const wrapAsync = require('./utilities/wrapAsync')
 
 
 const scriptSrcUrls = [
@@ -100,15 +109,22 @@ app.use(
 
 
 
+const MongoStore = require('connect-mongo');
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: 'thisshouldbeabettersecret!'
+    }
+});
 
-
-
-const ExpressError = require('./utilities/ExpressError')
-const wrapAsync = require('./utilities/wrapAsync')
-
+store.on('error', function(error){
+    console.log('MongoStore Error:',error)
+} )
 
 //Session Config and Cookies
 const sessionConfig = {
+    store,
     name: 'Session',
     secret: 'thisisasecret',
     resave: false,
