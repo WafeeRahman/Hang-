@@ -5,7 +5,9 @@
                 <h4 class="alert-heading">
                     <%= err.message %>
                 </h4>
+                <% if (process.env.NODE_ENV !== "production") { %>
                 <p class="text-break"> <%= err.stack %> </p>
+                <% } %>
                 <p class="mb-0"><a href="/spotgrounds" class="card-link btn btn-success">Back</a></p>
             </div>
         </div>

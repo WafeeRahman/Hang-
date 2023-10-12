@@ -1,9 +1,7 @@
-
-
-
 <% layout('/layouts/boilerplate') %>
+
 <link rel="stylesheet" href="/stylesheets/map.css">
-<div id="cluster-map" style="width: 100%; height:500px"></div>
+<div id="cluster-map"></div>
  
     <h1>All Spots</h1>
 
@@ -20,9 +18,9 @@
             <div class="row">
                 <div class="col-md-4">
                     <% if (spot.thumbnail.length) { %>
-                        <img class="img-fluid" alt="" src="<%=spot.thumbnail[0].url%>">
+                        <img crossorigin="anonymous" class="img-fluid" alt="" src="<%=spot.thumbnail[0].url%>">
                         <% } else {%>
-                            <img class="img-fluid" alt=""
+                            <img crossorigin="anonymous" class="img-fluid" alt=""
                                 src="https://res.cloudinary.com/djgibqxxv/image/upload/v1697057877/wiwcjtc0dcxzxqhhsiai.jpg">
                             <% } %>
                 </div>

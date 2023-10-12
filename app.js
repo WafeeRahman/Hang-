@@ -5,7 +5,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const mongoose = require('mongoose'); //Req Mongoose
 const path = require('path')
-
+const mongoSanitize = require('express-mongo-sanitize');
 //Connect to Mongoose and Acquire Courtground Schema
 
 mongoose.connect('mongodb://127.0.0.1:27017/spot-grounds', {
@@ -40,7 +40,7 @@ const User = require('./models/user');
 const userRoutes = require('./routes/users');
 const spotgroundRoutes = require('./routes/spotgrounds');
 const reviewRoutes = require('./routes/reviews');
-
+const helmet = require('helmet')
 
 app.engine('ejs', EJSmate)
 app.set('view engine', 'ejs');
@@ -49,6 +49,59 @@ app.set('/views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true })); // Parses Pages
 app.use(methodOverride('_method')) //Overwrites HTML methods for PATCHING
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(mongoSanitize());
+
+
+const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://api.mapbox.com/",
+    "https://kit.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net",
+];
+const styleSrcUrls = [
+    "https://kit-free.fontawesome.com/",
+    "https://stackpath.bootstrapcdn.com/",
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
+    "https://api.mapbox.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://fonts.googleapis.com/",
+    "https://use.fontawesome.com/",
+];
+const connectSrcUrls = [
+    "https://api.mapbox.com/",
+    "https://a.tiles.mapbox.com/",
+    "https://b.tiles.mapbox.com/",
+    "https://events.mapbox.com/",
+];
+const fontSrcUrls = [];
+
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'", ...connectSrcUrls],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            objectSrc: [],
+            imgSrc: [
+                "'self'",
+                "blob:",
+                "data:",
+                `https://res.cloudinary.com/djgibqxxv/`, 
+                "https://images.unsplash.com/",
+            ],
+            fontSrc: ["'self'", ...fontSrcUrls],
+        },
+    })
+);
+
+
+
+
+
 
 const ExpressError = require('./utilities/ExpressError')
 const wrapAsync = require('./utilities/wrapAsync')
@@ -56,10 +109,12 @@ const wrapAsync = require('./utilities/wrapAsync')
 
 //Session Config and Cookies
 const sessionConfig = {
+    name: 'Session',
     secret: 'thisisasecret',
     resave: false,
     cookie: {
         httpOnly: true,
+        //secure: true,
         expires:Date.now() + 1000*60*60*24*7, // How many milliseconds are in a week?
         maxAge: 1000 * 60 * 60 * 24 * 7
 
