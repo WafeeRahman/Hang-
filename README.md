@@ -1,5 +1,5 @@
 <h1>Hang: A Result of Exploring Web Development</h1>
-Introduction
+<h2>Introduction</h2>
 Hang is a fullstack CRUD web application that I started to make after taking a summer course on Udemy. It's heavily inspired by the knowledge and skills I acquired during this course, with the aim of creating a platform for discovering and sharing hangout spots.
 
 <h2>Tech Stack</h2>
